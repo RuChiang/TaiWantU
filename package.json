@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "demandSchema.js",
+  "scripts": {
+    "start": "node server/server.js",
+  },
+  "engines":{
+    "node": "v8.8.1",
+  },
+
   "dependencies": {
     "body-parser": "^1.18.2",
     "expect": "^1.20.2",
