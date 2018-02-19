@@ -1,3 +1,8 @@
+//Todo:
+// 1. db field urgency
+// 2. whether to set an admin
+
+
 var express = require('express');
 var bodyParser = require('body-parser');
 //checking if the connection is going fine
@@ -18,6 +23,31 @@ var port = process.env.PORT;
 
 app.use(bodyParser.json());
 
+
+//when user visit
+app.get('/',(req,res)=>{
+  //welcome page
+  //display demand/donate info
+
+});
+
+//must login to donate
+//
+
+
+app.get('/donate',(req, res)=>{
+  //send back display login page msg
+});
+
+app.get('/demand', (req, res)=>{
+  // to be discussed with Dr.chen
+  // 有登入跟沒登入差異
+});
+
+
+
+
+
 //demand request handling
 app.post('/demand',(req,res)=>{
 
@@ -26,6 +56,7 @@ app.post('/demand',(req,res)=>{
   //   1. how to accumulate the amount of the same resource in different entries?
   //   2. how to split and merge the same resource in different entries?
   //   3. the JSON data sent back to the user must contain a result field
+  //   4. what's the effect of logining in with different authority level
   donateModel.findOne({
     category: req.body.category,
     subCategory: req.body.subCategory,
