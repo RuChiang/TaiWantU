@@ -19,7 +19,7 @@ var demandModel = mongoose.model('Demand',demandSchema);
 
 
 var app = express();
-var port = process.env.PORT;
+var port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
