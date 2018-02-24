@@ -28,7 +28,9 @@ app.use(bodyParser.json());
 app.get('/',(req,res)=>{
   //welcome page
   //display demand/donate info
-
+  res.send({
+    text: 'getting this page with success'
+  });
 });
 
 //must login to donate
