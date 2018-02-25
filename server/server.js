@@ -1,10 +1,12 @@
 //Todo:
 // 1. db field urgency
 // 2. whether to set an admin
+// 3. update info
 
 
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
+const _ = require('lodash');
 //checking if the connection is going fine
 try{
   var {mongoose} = require('./db/mongoose');
@@ -13,9 +15,11 @@ try{
 }
 var {demandSchema} = require('./schemas/demandSchema');
 var {donateSchema} = require('./schemas/donateSchema');
+var {userSchema} = require('./schemas/userSchema');
 
 var donateModel = mongoose.model('Donate',donateSchema); //first arg here is the collection name
 var demandModel = mongoose.model('Demand',demandSchema);
+var userModel = mongoose.model('User',userSchema);
 
 
 var app = express();
@@ -34,7 +38,9 @@ app.get('/',(req,res)=>{
 });
 
 //must login to donate
-//
+
+
+
 
 
 app.get('/donate',(req, res)=>{
@@ -47,6 +53,19 @@ app.get('/demand', (req, res)=>{
 });
 
 
+
+app.post('/signup',(req,res)=>{
+
+  var body = _.pick(req.body, ['email', 'password']);
+  var userInstance = new userModel(body);
+  userInstance.save().then(() => {
+    return userInstance.generateAuthToken();
+  }).then((token) =>{
+    res.header('x-auth',token).send(userInstance);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
 
 
 
