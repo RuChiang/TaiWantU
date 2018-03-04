@@ -13,14 +13,11 @@ try{
 }catch(e){
   return console.log(e);
 }
-var {demandSchema} = require('./schemas/demandSchema');
-var {donateSchema} = require('./schemas/donateSchema');
-var {userSchema} = require('./schemas/userSchema');
+var {demandSchema, demandModel} = require('./schemas/demandSchema');
+var {donateSchema, donateModel} = require('./schemas/donateSchema');
+var {userSchema, userModel} = require('./schemas/userSchema');
 
-var donateModel = mongoose.model('Donate',donateSchema); //first arg here is the collection name
-var demandModel = mongoose.model('Demand',demandSchema);
-var userModel = mongoose.model('User',userSchema);
-
+var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -52,9 +49,13 @@ app.get('/demand', (req, res)=>{
   // 有登入跟沒登入差異
 });
 
+app.get('/users/me', authenticate,(req, res) => {
+  res.send(req.user);
+});
 
 
-app.post('/signup',(req,res)=>{
+
+app.post('/users',(req,res)=>{
 
   var body = _.pick(req.body, ['email', 'password']);
   var userInstance = new userModel(body);

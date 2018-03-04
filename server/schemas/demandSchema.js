@@ -46,6 +46,9 @@ var demandSchema = new Schema({
 
 });
 
+var demandModel = mongoose.model('Demand',demandSchema);
+
 module.exports = {
-  demandSchema
+  demandSchema,
+  demandModel
 };

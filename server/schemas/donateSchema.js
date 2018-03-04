@@ -49,6 +49,9 @@ var donateSchema = new Schema({
 
 });
 
+var donateModel = mongoose.model('Donate',donateSchema);
+
 module.exports = {
-  donateSchema
+  donateSchema,
+  donateModel
 };
