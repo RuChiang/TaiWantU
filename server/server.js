@@ -38,16 +38,18 @@ app.get('/',(req,res)=>{
 
 
 
+// middleware for donate which handles all types of RESTful
+app.use('/donate', donate);
+// app.get('/donate',(req, res)=>{
+//   //send back display login page msg
+// });
 
-
-app.get('/donate',(req, res)=>{
-  //send back display login page msg
-});
-
-app.get('/demand', (req, res)=>{
-  // to be discussed with Dr.chen
-  // 有登入跟沒登入差異
-});
+// middleware for demand which handles all types of RESTful
+app.use('/demand', demand);
+// app.get('/demand', (req, res)=>{
+//   // to be discussed with Dr.chen
+//   // 有登入跟沒登入差異
+// });
 
 app.get('/users/me', authenticate,(req, res) => {
   res.send(req.user);
