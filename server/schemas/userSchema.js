@@ -60,6 +60,18 @@ userSchema.methods.generateAuthToken = function () {
   });
 };
 
+userSchema.statics.findByCredentials = function (email, password){
+  var user = this;
+
+  user.findOne({email}).then((user)=>{
+    if(!user){
+      return Promise.reject();
+    }
+
+    
+  });
+}
+
 //can be used by the model; methods are for instances!
 userSchema.statics.findByToken = function (token){
   var user = this;

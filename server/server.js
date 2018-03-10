@@ -13,6 +13,7 @@ try{
 }catch(e){
   return console.log(e);
 }
+
 var {demandSchema, demandModel} = require('./schemas/demandSchema');
 var {donateSchema, donateModel} = require('./schemas/donateSchema');
 var {userSchema, userModel} = require('./schemas/userSchema');
@@ -55,10 +56,19 @@ app.get('/users/me', authenticate,(req, res) => {
   res.send(req.user);
 });
 
+//login
+app.post('/users/login', (req, res)=>{
+  var body = _.pick(req.body, ['email', 'password']);
 
+  userModel.findByCredentials(body.email, body,password).then((user)=>{
 
+  }).catch((e)=>{
+
+  });
+})
+
+//signing in with a new user account
 app.post('/users',(req,res)=>{
-
   var body = _.pick(req.body, ['email', 'password']);
   var userInstance = new userModel(body);
   userInstance.save().then(() => {
