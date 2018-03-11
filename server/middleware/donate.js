@@ -17,4 +17,6 @@ router.post('/', function(req, res) {
   // return result
 });
 
-module.exports = router;
+module.exports = {
+  donateRouter:router
+};

@@ -19,6 +19,8 @@ var {donateSchema, donateModel} = require('./schemas/donateSchema');
 var {userSchema, userModel} = require('./schemas/userSchema');
 
 var {authenticate} = require('./middleware/authenticate');
+var {donateRouter} = require('./middleware/donate');
+var {demandRouter} = require('./middleware/demand');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -40,13 +42,13 @@ app.get('/',(req,res)=>{
 
 
 // middleware for donate which handles all types of RESTful
-app.use('/donate', donate);
+app.use('/donate', donateRouter);
 // app.get('/donate',(req, res)=>{
 //   //send back display login page msg
 // });
 
 // middleware for demand which handles all types of RESTful
-app.use('/demand', demand);
+app.use('/demand', demandRouter);
 // app.get('/demand', (req, res)=>{
 //   // to be discussed with Dr.chen
 //   // 有登入跟沒登入差異
@@ -57,19 +59,23 @@ app.get('/users/me', authenticate,(req, res) => {
 });
 
 //login
-app.post('/users/login', (req, res)=>{
+app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
 
-  userModel.findByCredentials(body.email, body,password).then((user)=>{
-
-  }).catch((e)=>{
-
+  userModel.findByCredentials(body.email, body.password).then((user) => {
+    return user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    });
+  }).catch((e) => {
+    res.status(400).send();
   });
-})
+});
+
 
 //signing in with a new user account
 app.post('/users',(req,res)=>{
   var body = _.pick(req.body, ['email', 'password']);
+
   var userInstance = new userModel(body);
   userInstance.save().then(() => {
     return userInstance.generateAuthToken();
@@ -79,6 +85,15 @@ app.post('/users',(req,res)=>{
     res.status(400).send(e);
   })
 })
+
+app.delete('/users/me/token', authenticate, (req, res)=>{
+  req.user.removeToken(req.token).then(()=>{
+    res.status(200).send();
+  }, ()=>{
+    res.status(400).send();
+
+  });
+});
 
 
 

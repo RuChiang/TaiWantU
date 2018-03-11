@@ -60,21 +60,43 @@ userSchema.methods.generateAuthToken = function () {
   });
 };
 
-userSchema.statics.findByCredentials = function (email, password){
+userSchema.methods.removeToken = function(token){
   var user = this;
 
-  user.findOne({email}).then((user)=>{
-    if(!user){
-      return Promise.reject();
+  return user.update({
+    $pull:{
+      tokens:{
+        token: token
+      }
     }
-
-    
   });
 }
 
+
+userSchema.statics.findByCredentials = function (email, password) {
+  var User = this;
+
+  return User.findOne({email}).then((user) => {
+    if (!user) {
+      return Promise.reject();
+    }
+
+    return new Promise((resolve, reject) => {
+      // Use bcrypt.compare to compare password and user.password
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          resolve(user);
+        } else {
+          reject();
+        }
+      });
+    });
+  });
+};
+
 //can be used by the model; methods are for instances!
 userSchema.statics.findByToken = function (token){
-  var user = this;
+  var User = this;
   var decoded;
 
   try{
@@ -83,7 +105,7 @@ userSchema.statics.findByToken = function (token){
     return  Promise.reject();
   }
 
-  return userModel.findOne({
+  return User.findOne({
     '_id': decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'

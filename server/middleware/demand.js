@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 var express = require('express');
-var var {demandSchema, demandModel} = require('./../schemas/demandSchema');
+var {demandSchema, demandModel} = require('./../schemas/demandSchema');
 
 var router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
   // the headings of the demand form
   // can get from demandSchema?
 
-  var form = {[]};
+  var form = {};
   res.json(form);
 });
 
@@ -20,4 +20,6 @@ router.post('/', function(req, res) {
   // return result
 });
 
-module.exports = {router};
+module.exports = {
+  demandRouter:router
+};
