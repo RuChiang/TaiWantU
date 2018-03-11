@@ -19,6 +19,8 @@ var {donateSchema, donateModel} = require('./schemas/donateSchema');
 var {userSchema, userModel} = require('./schemas/userSchema');
 
 var {authenticate} = require('./middleware/authenticate');
+var donate = require('./middleware/donate');
+var demand = require('./middleware/demand');
 
 var app = express();
 var port = process.env.PORT || 3000;
