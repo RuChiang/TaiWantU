@@ -32,7 +32,11 @@ var userSchema = new Schema({
     token:{
       type: String,
       require: true,
-    }
+    },
+    time: {
+      type: Date,
+      default: Date.now
+    },
   }]
 
   //authority attribute should also be set here
