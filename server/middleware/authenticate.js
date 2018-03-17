@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-
-
-var {userSchema} = require('./../schemas/userSchema');
-var userModel = mongoose.model('User',userSchema);
+const {userModel, userSchema} = require('./../schemas/userSchema');
 
 
 var authenticate = (req, res, next) => {

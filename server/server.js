@@ -1,12 +1,9 @@
-//Todo:
-// 1. db field urgency
-// 2. whether to set an admin
-// 3. update info
+
+require('./config/config');
 
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const _ = require('lodash');
 //checking if the connection is going fine
 try{
   var {mongoose} = require('./db/mongoose');
@@ -14,16 +11,17 @@ try{
   return console.log(e);
 }
 
-var {demandSchema, demandModel} = require('./schemas/demandSchema');
-var {donateSchema, donateModel} = require('./schemas/donateSchema');
-var {userSchema, userModel} = require('./schemas/userSchema');
+const {demandSchema, demandModel} = require('./schemas/demandSchema');
+const {donateSchema, donateModel} = require('./schemas/donateSchema');
+const {userSchema, userModel} = require('./schemas/userSchema');
 
-var {authenticate} = require('./middleware/authenticate');
-var {donateRouter} = require('./middleware/donate');
-var {demandRouter} = require('./middleware/demand');
+const {donateRouter} = require('./middleware/donate');
+const {demandRouter} = require('./middleware/demand');
+const {userRouter} = require('./middleware/user');
+
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.use(bodyParser.json());
 
@@ -37,140 +35,22 @@ app.get('/',(req,res)=>{
   });
 });
 
-//must login to donate
 
 
 
 // middleware for donate which handles all types of RESTful
 app.use('/donate', donateRouter);
-// app.get('/donate',(req, res)=>{
-//   //send back display login page msg
-// });
+
 
 // middleware for demand which handles all types of RESTful
 app.use('/demand', demandRouter);
-// app.get('/demand', (req, res)=>{
-//   // to be discussed with Dr.chen
-//   // 有登入跟沒登入差異
-// });
-
-app.get('/users/me', authenticate,(req, res) => {
-  res.send(req.user);
-});
-
-//login
-app.post('/users/login', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password']);
-
-  userModel.findByCredentials(body.email, body.password).then((user) => {
-    return user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user);
-    });
-  }).catch((e) => {
-    res.status(400).send();
-  });
-});
 
 
-//signing in with a new user account
-app.post('/users',(req,res)=>{
-  var body = _.pick(req.body, ['email', 'password']);
-
-  var userInstance = new userModel(body);
-  userInstance.save().then(() => {
-    return userInstance.generateAuthToken();
-  }).then((token) =>{
-    res.header('x-auth',token).send(userInstance);
-  }).catch((e) => {
-    res.status(400).send(e);
-  })
-})
-
-app.delete('/users/me/token', authenticate, (req, res)=>{
-  req.user.removeToken(req.token).then(()=>{
-    res.status(200).send();
-  }, ()=>{
-    res.status(400).send();
-
-  });
-});
+// middleware for user which handles all types of RESTful
+app.use('/user', userRouter);
 
 
 
-//demand request handling
-app.post('/demand',(req,res)=>{
-
-  //first search if there is a corresponding donation
-  // Todo:
-  //   1. how to accumulate the amount of the same resource in different entries?
-  //   2. how to split and merge the same resource in different entries?
-  //   3. the JSON data sent back to the user must contain a result field
-  //   4. what's the effect of logining in with different authority level
-  donateModel.findOne({
-    category: req.body.category,
-    subCategory: req.body.subCategory,
-    name: req.body.name,
-    quantity: { $gte: req.body.quantity},
-  },'location quality source').then((doc)=>{
-    if(doc == null){
-      //no document is found, save this demand
-      var demandInstance = new demandModel({
-        authority: req.body.authority,
-        member: req.body.member,
-        category: req.body.category,
-        subCategory: req.body.subCategory,
-        name: req.body.name,
-        quantity: req.body.quantity,
-        time: req.body.time,
-        location: req.body.location,
-      });
-
-      demandInstance.save().then((doc)=>{
-        res.send({
-          shortResult: 'false',
-          result: 'can\'t find the document now, the demand is saved',
-          doc
-        });
-      },(e)=>{
-        //error upon saving
-        res.status(400).send({
-          shortResult: 'false',
-          e
-        });
-      });
-    }else{
-      //document is found, show it to the user
-      res.send({
-        shortResult: 'true',
-        result: 'document is found',
-        doc
-      });
-    }
-  }).catch((e) => console.log(e));
-})
-
-//donate request handling
-app.post('/donate',(req, res)=>{
-  var donateInstance = new donateModel({
-    category: req.body.category,
-    subCategory: req.body.subCategory,
-    name: req.body.name,
-    quantity: req.body.quantity,
-    mass: req.body.mass,
-    time: req.body.time,
-    location: req.body.location,
-    quality: req.body.quality,
-    source: req.body.source,
-  });
-
-  donateInstance.save().then((doc)=>{
-    res.send(doc);
-  },(e)=>{
-    res.status(400).send(e);
-  });
-
-
-})
 
 app.listen(port,()=>{
   console.log(`Started up at port ${port}`);

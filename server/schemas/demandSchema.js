@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 var demandSchema = new Schema({
 
   authority: {
@@ -43,6 +43,12 @@ var demandSchema = new Schema({
   }, //should be stored in other form
   //quality
   //source
+
+
+  _creator:{
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 
 });
 

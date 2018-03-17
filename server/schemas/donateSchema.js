@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 var donateSchema = new Schema({
 
   category: {
@@ -46,6 +46,11 @@ var donateSchema = new Schema({
     type: String,
     required: true
   },
+
+  _creator:{
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 
 });
 
