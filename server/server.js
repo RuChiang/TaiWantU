@@ -1,9 +1,11 @@
 
 require('./config/config');
 
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
 
-const express = require('express');
-const bodyParser = require('body-parser');
+
 //checking if the connection is going fine
 try{
   var {mongoose} = require('./db/mongoose');
@@ -19,11 +21,12 @@ const {donateRouter} = require('./middleware/donate');
 const {demandRouter} = require('./middleware/demand');
 const {userRouter} = require('./middleware/user');
 
-
 var app = express();
 var port = process.env.PORT;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 //when user visit
