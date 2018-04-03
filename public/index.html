@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TaiWantU</title>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="/javascripts/myscript.js"></script>
+</head>
+<body ng-app="taiWantU" ng-controller="taiWantUController">
+	<div id="header">
+		<button id="loginBtn" ng-show="showHomePage">Sign up/Login</button>
+	</div>
+	<h1>Welcome to TaiWantU</h1>
+	<div id="middle">
+		<table>
+			<tr>
+				<th>News</th>
+				<th>Announcement</th>
+			</tr>
+			<tr>
+				<td>Something</td>
+				<td>Needed</td>
+			</tr>
+		</table>
+		<button id="demandBtn" ng-show="showHomePage">Demand</button>
+		<button id="donateBtn" ng-show="showHomePage">Donate</button>
+	</div>
+	
+</body>
+</html>
