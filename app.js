@@ -39,7 +39,11 @@ app.get('/',(req,res)=>{
 });
 
 
-
+// just for testing purpose
+app.use('/test', function(req, res) {
+	// send a static html file back to client
+	res.sendFile(path.join(__dirname, 'public', 'new.html'));
+});
 
 
 // middleware for donate which handles all types of RESTful
