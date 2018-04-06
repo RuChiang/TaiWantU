@@ -39,13 +39,20 @@ router.post('/signup',(req,res)=>{
   // console.log(body.email);
   // console.log(body.password);
   var userInstance = new userModel(body);
-  userInstance.save().then(() => {
-    return userInstance.generateAuthToken();
-  }).then((token) =>{
-    res.header('x-auth',token).send(userInstance);
-  }).catch((e) => {
-    res.status(400).send("signup error");
+  userModel.findOne({'email':body.email}).then((user)=>{
+    if(!user){
+      userInstance.save().then(() => {
+        return userInstance.generateAuthToken();
+      }).then((token) =>{
+        res.header('x-auth',token).send(userInstance);
+      }).catch((e) => {
+        res.status(400).send("signup error");
+      })
+    }else{
+      res.status(400).send("user already exist");
+    }
   })
+
 });
 
 

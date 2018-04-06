@@ -33,10 +33,7 @@ var userSchema = new Schema({
       type: String,
       require: true,
     },
-    time: {
-      type: Date,
-      default: Date.now
-    },
+
   }]
 
   //authority attribute should also be set here
@@ -55,7 +52,10 @@ userSchema.methods.toJSON = function(){
 userSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = 'auth';
-  var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
+  var token = jwt.sign({_id: user._id.toHexString(), access},
+    process.env.JWT_SECRET,
+    {expiresIn:"1h"}).toString();
+    //auth token expires in 1 hour
 
   user.tokens = user.tokens.concat([{access,token}]);
 
@@ -111,6 +111,36 @@ userSchema.statics.findByToken = function (token){
   try{
     decoded = jwt.verify(token,process.env.JWT_SECRET);
   }catch(e){
+    //delete the already invalid token in the database
+    // console.log(e);
+    // console.log("the token has expired. should be deleted");
+    User.findOne({
+      'tokens.token': token,
+      'tokens.access': 'auth'
+    }).then((user)=>{
+
+      if(user){
+        console.log("found that fkig user");
+        console.log(user.toString());
+        user.update({
+          $pull:{
+            tokens:{
+              token: token
+            }
+          }
+        },function (err, numAffected){
+          if(err){
+            console.log("err " + e);
+          }else{
+            console.log("numAffected " + numAffected);
+          }
+        });
+        //console.log("by now the token should be deleted");
+
+      }
+    });
+
+
     return  Promise.reject();
   }
 
