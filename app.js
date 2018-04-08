@@ -27,15 +27,17 @@ var port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'pug')
 
 
 //when user visit
 app.get('/',(req,res)=>{
   //welcome page
   //display demand/donate info
-  res.send({
-    text: 'getting this page with success'
-  });
+  // res.send({
+  //   text: 'getting this page with success'
+  // });
+   res.sendFile(path.join(__dirname+'/public/new.html'));
 });
 
 

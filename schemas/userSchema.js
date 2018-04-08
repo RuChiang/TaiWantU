@@ -120,8 +120,13 @@ userSchema.statics.findByToken = function (token){
     }).then((user)=>{
 
       if(user){
-        console.log("found that fkig user");
+        //console.log("found that fkig user");
         console.log(user.toString());
+//
+//
+//
+//
+//somehow the update function below doesnt run without the callback function
         user.update({
           $pull:{
             tokens:{
