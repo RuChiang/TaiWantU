@@ -30,6 +30,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug')
 
 
+app.get('/text/test',(req,res)=>{
+  res.send("text response");
+});
+
+app.get('/login-action',(req,res)=>{
+  res.sendFile(path.join(__dirname+'/public/login-action.html'));
+});
+
+
 //when user visit
 app.get('/',(req,res)=>{
   //welcome page
@@ -41,10 +50,11 @@ app.get('/',(req,res)=>{
 });
 
 
+
 // just for testing purpose
-app.use('/test', function(req, res) {
+app.get('/test', function(req, res) {
 	// send a static html file back to client
-	res.sendFile(path.join(__dirname, 'public', 'new.html'));
+	res.sendFile(path.join(__dirname, 'public', 'test.html'));
 });
 
 
