@@ -10,7 +10,7 @@
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-	<script src="/javascripts/indexScript.js"></script>
+	<script src="/javascripts/script.js"></script>
 
 
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
-	      <li class="nav-item active">
+	      <!-- <li class="nav-item active">
 	        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item">
@@ -37,20 +37,20 @@
 
 	      <li class="nav-item">
 	        <a class="nav-link" href="#">Disabled</a>
-	      </li>
+	      </li> -->
 	    </ul>
 
-	    <button ng-click="loginSignup()" ng-show="showHomePage">Login/Signup</button>
+	    <button ng-click="loginSignup()" class = "btn btn-success" ng-show="showHomePage">Login/Signup</button>
 	  </div>
 	</nav>
 
 
 
 
-	<div class="container-fluid text-center bg-info p-5">
+	<div class="container text-center  p-5">
 
 		<h1 ng-click="testText()">Welcome to TaiWantU</h1>
-		<h2>{{test}}</h2>
+		<!-- <h2>{{test}}</h2> -->
 
 		<div id="middle" align="center" >
 			<table>

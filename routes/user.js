@@ -6,6 +6,7 @@ const _ = require('lodash');
 
 
 
+
 var router = express.Router();
 
 
@@ -24,11 +25,11 @@ router.post('/login',(req,res)=>{
   userModel.findByCredentials(body.email, body.password).then((user) => {
     //console.log('its here');
     return user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user);
+      res.cookie('xauth', token).send("successful login");
     });
   }).catch((e) => {
     console.log('something goes wrong here');
-    res.status(400).send("login error");
+    res.send("login error");
   });
 });
 
@@ -44,12 +45,13 @@ router.post('/signup',(req,res)=>{
       userInstance.save().then(() => {
         return userInstance.generateAuthToken();
       }).then((token) =>{
-        res.header('x-auth',token).send(userInstance);
+        res.cookie('xauth',token).send("successful signup");
+
       }).catch((e) => {
-        res.status(400).send("signup error");
+        res.send("signup error");
       })
     }else{
-      res.status(400).send("user already exist");
+      res.send("user already exist");
     }
   })
 

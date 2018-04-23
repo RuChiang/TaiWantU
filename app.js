@@ -4,6 +4,7 @@ require('./config/config');
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 
 //checking if the connection is going fine
@@ -25,6 +26,7 @@ var app = express();
 var port = process.env.PORT;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug')
@@ -32,6 +34,10 @@ app.set('view engine', 'pug')
 
 app.get('/text/test',(req,res)=>{
   res.send("text response");
+});
+
+app.get('/checkCookie',(req,res)=>{
+  res.send(req.cookies);
 });
 
 app.get('/login-action',(req,res)=>{

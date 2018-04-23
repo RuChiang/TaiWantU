@@ -3,7 +3,7 @@ const {userModel, userSchema} = require('./../schemas/userSchema');
 
 
 var authenticate = (req, res, next) => {
-  var token = req.header('x-auth');
+  var token = req.cookies.xauth;
 
   userModel.findByToken(token).then((user) => {
     if (!user) {
