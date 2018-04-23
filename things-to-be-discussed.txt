@@ -1,0 +1,2 @@
+1. Since jwt itself can determine if the token has expired, is it necessary to store token in the database?
+  The logout function deletes the token in the db. Needa check if we still need the logout function
