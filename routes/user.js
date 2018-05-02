@@ -59,8 +59,9 @@ router.post('/signup',(req,res)=>{
 
 
 router.delete('/logout', authenticate, (req, res)=>{
+  console.log("logout function is called here");
   req.user.removeToken(req.token).then(()=>{
-    res.status(200).send();
+    res.status(200).clearCookie('xauth').send("successful logout");
   }, ()=>{
     res.status(400).send("logout error");
 

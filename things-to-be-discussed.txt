@@ -1,2 +1,9 @@
 1. Since jwt itself can determine if the token has expired, is it necessary to store token in the database?
   The logout function deletes the token in the db. Needa check if we still need the logout function
+
+2. The window.location.href seems to be in the html DOM structure, which is different form the one in angularjs.
+  Why the $window service can use location.href as well?
+
+3. how to keep session without using a cookie? - use a service to achieve this(most of the users still use cookies)
+
+4. Problem: users can go to wherever they want by typing in the address of the page

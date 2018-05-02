@@ -21,6 +21,8 @@ const {userSchema, userModel} = require('./schemas/userSchema');
 const {donateRouter} = require('./routes/donate');
 const {demandRouter} = require('./routes/demand');
 const {userRouter} = require('./routes/user');
+const {authenticate} = require('./routes/authenticate');
+
 
 var app = express();
 var port = process.env.PORT;
@@ -28,40 +30,32 @@ var port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+//use for admin pages
+//app.use('/admin',express.static(path.join(__dirname, 'public')));
+
 app.set('view engine', 'pug')
 
 
 app.get('/text/test',(req,res)=>{
   res.send("text response");
+  console.log("text/test checking route");
 });
 
 app.get('/checkCookie',(req,res)=>{
   res.send(req.cookies);
-});
-
-app.get('/login-action',(req,res)=>{
-  res.sendFile(path.join(__dirname+'/public/login-action.html'));
-});
-
-
-//when user visit
-app.get('/',(req,res)=>{
-  //welcome page
-  //display demand/donate info
-  // res.send({
-  //   text: 'getting this page with success'
-  // });
-   res.sendFile(path.join(__dirname+'/public/new.html'));
+  console.log("cookie checking route");
 });
 
 
 
-// just for testing purpose
-app.get('/test', function(req, res) {
-	// send a static html file back to client
-	res.sendFile(path.join(__dirname, 'public', 'test.html'));
-});
+
+
+// // just for testing purpose
+// app.get('/test', function(req, res) {
+// 	// send a static html file back to client
+// 	res.sendFile(path.join(__dirname, 'public', 'test.html'));
+// });
 
 
 // middleware for donate which handles all types of RESTful
